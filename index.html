@@ -33,7 +33,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Show the link after file is uploaded
+                // Show the link after the file is uploaded
                 document.getElementById('linkContainer').style.display = 'block';
                 document.getElementById('uploadedLink').href = data.url;
                 document.getElementById('uploadedLink').textContent = data.url;
