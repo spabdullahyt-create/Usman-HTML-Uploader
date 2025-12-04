@@ -1,6 +1,6 @@
 const { Blob } = require('@vercel/blob');
 const formidable = require('formidable');
-const fs = require('fs');  // Ensure fs is required for file handling
+const fs = require('fs');
 
 module.exports = async (req, res) => {
     const form = new formidable.IncomingForm();
@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
 
         const file = files.htmlFile[0]; // Get the uploaded file
         const filePath = file.filepath;
-        const fileContent = fs.readFileSync(filePath); // Read the file content
+        const fileContent = fs.readFileSync(filePath);
 
         try {
             // Upload the file to Vercel Blob
@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
             const blobUrl = await blob.put(fileContent, {
                 contentType: 'text/html',
                 filename: file.originalFilename,
-                access: 'public' // Making the file publicly accessible
+                access: 'public' // Make sure it's public
             });
 
             // Return the URL where the file is stored
@@ -30,4 +30,3 @@ module.exports = async (req, res) => {
         }
     });
 };
-
