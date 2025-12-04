@@ -23,10 +23,10 @@ module.exports = async (req, res) => {
                 access: 'public', // Ensure it's publicly accessible
             });
 
-            // Create a permanent, publicly accessible URL
+            // Construct the permanent URL for the uploaded file
             const permanentUrl = `https://usman-html-uploader.vercel.app/uploads/${file.originalFilename}`;
 
-            // Return the permanent URL where the file is stored
+            // Return the permanent URL
             res.status(200).json({ url: permanentUrl });
         } catch (err) {
             res.status(500).send('Error uploading to Vercel Blob');
