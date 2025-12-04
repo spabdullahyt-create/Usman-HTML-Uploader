@@ -4,7 +4,7 @@ const fs = require('fs');
 
 module.exports = async (req, res) => {
     const form = new formidable.IncomingForm();
-    
+
     form.parse(req, async (err, fields, files) => {
         if (err) {
             return res.status(500).send('Error in file parsing');
@@ -20,10 +20,10 @@ module.exports = async (req, res) => {
             const blobUrl = await blob.put(fileContent, {
                 contentType: 'text/html',
                 filename: file.originalFilename,
-                access: 'public' // Ensure the file is publicly accessible
+                access: 'public', // Ensure it's publicly accessible
             });
 
-            // Construct a permanent URL for the file
+            // Create a permanent, publicly accessible URL
             const permanentUrl = `https://usman-html-uploader.vercel.app/uploads/${file.originalFilename}`;
 
             // Return the permanent URL where the file is stored
