@@ -20,11 +20,14 @@ module.exports = async (req, res) => {
             const blobUrl = await blob.put(fileContent, {
                 contentType: 'text/html',
                 filename: file.originalFilename,
-                access: 'public' // Make sure it's public
+                access: 'public' // Ensure the file is publicly accessible
             });
 
-            // Return the URL where the file is stored
-            res.status(200).json({ url: blobUrl });
+            // Construct a permanent URL for the file
+            const permanentUrl = `https://usman-html-uploader.vercel.app/uploads/${file.originalFilename}`;
+
+            // Return the permanent URL where the file is stored
+            res.status(200).json({ url: permanentUrl });
         } catch (err) {
             res.status(500).send('Error uploading to Vercel Blob');
         }
