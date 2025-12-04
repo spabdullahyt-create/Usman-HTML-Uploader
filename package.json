@@ -1,0 +1,13 @@
+{
+  "name": "html-upload-app",
+  "version": "1.0.0",
+  "description": "A simple HTML upload app using Vercel Blob",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@vercel/blob": "^1.0.0",
+    "formidable": "^2.0.1"
+  }
+}
