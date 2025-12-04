@@ -7,29 +7,41 @@
 </head>
 <body>
     <h2>Upload Your HTML Code</h2>
-    <p>Upload an HTML file, and we will provide you with a link to access it:</p>
+    <p>Upload an HTML file, and we will provide you with a permanent link to access it:</p>
 
-    <form action="/api/upload" method="POST" enctype="multipart/form-data">
+    <form id="uploadForm" action="/api/upload" method="POST" enctype="multipart/form-data">
         <input type="file" name="htmlFile" accept=".html" required>
         <br><br>
         <input type="submit" value="Upload HTML">
     </form>
 
-    <div id="linkContainer"></div>
+    <div id="linkContainer" style="display: none;">
+        <h3>Your uploaded file is available at:</h3>
+        <p><a id="uploadedLink" href="" target="_blank" style="word-wrap: break-word;">Your file link will appear here</a></p>
+    </div>
 
     <script>
-        document.querySelector('form').addEventListener('submit', function (e) {
+        // Handle the form submission via AJAX
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const fileInput = document.querySelector('input[name="htmlFile"]');
-            const file = fileInput.files[0];
+            const formData = new FormData(this);
 
-            if (file) {
-                const fileURL = URL.createObjectURL(file);
-                const linkContainer = document.getElementById('linkContainer');
-                linkContainer.innerHTML = `<p>Your uploaded HTML file can be accessed here:</p>
-                                           <a href="${fileURL}" target="_blank">View HTML File</a>`;
-            }
+            fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Show the link after file is uploaded
+                document.getElementById('linkContainer').style.display = 'block';
+                document.getElementById('uploadedLink').href = data.url;
+                document.getElementById('uploadedLink').textContent = data.url;
+            })
+            .catch(error => {
+                alert("Error uploading the file");
+                console.error(error);
+            });
         });
     </script>
 </body>
