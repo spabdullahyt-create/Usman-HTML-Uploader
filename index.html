@@ -21,7 +21,6 @@
     </div>
 
     <script>
-        // Handle the form submission via AJAX
         document.getElementById('uploadForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -33,7 +32,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Show the link after the file is uploaded
+                // Show the link after file is uploaded
                 document.getElementById('linkContainer').style.display = 'block';
                 document.getElementById('uploadedLink').href = data.url;
                 document.getElementById('uploadedLink').textContent = data.url;
