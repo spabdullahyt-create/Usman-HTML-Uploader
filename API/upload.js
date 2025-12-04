@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
 
         const file = files.htmlFile[0]; // Get the uploaded file
         const filePath = file.filepath;
-        const fileContent = fs.readFileSync(filePath);
+        const fileContent = fs.readFileSync(filePath); // Read the file content
 
         try {
             // Upload the file to Vercel Blob
