@@ -1,37 +1,33 @@
-const AWS = require('aws-sdk');
+const { Blob } = require('@vercel/blob');
 const formidable = require('formidable');
-const fs = require('fs');
-
-const s3 = new AWS.S3();
-const BUCKET_NAME = process.env.BUCKET_NAME;
+const fs = require('fs');  // Ensure fs is required for file handling
 
 module.exports = async (req, res) => {
     const form = new formidable.IncomingForm();
     
-    form.parse(req, (err, fields, files) => {
+    form.parse(req, async (err, fields, files) => {
         if (err) {
             return res.status(500).send('Error in file parsing');
         }
 
-        const file = files.htmlFile[0]; // Assuming one file is uploaded
+        const file = files.htmlFile[0]; // Get the uploaded file
         const filePath = file.filepath;
+        const fileContent = fs.readFileSync(filePath); // Read the file content
 
-        const fileContent = fs.readFileSync(filePath);
-        const params = {
-            Bucket: BUCKET_NAME,
-            Key: `uploads/${file.originalFilename}`,
-            Body: fileContent,
-            ContentType: 'text/html',
-            ACL: 'public-read'
-        };
+        try {
+            // Upload the file to Vercel Blob
+            const blob = new Blob();
+            const blobUrl = await blob.put(fileContent, {
+                contentType: 'text/html',
+                filename: file.originalFilename,
+                access: 'public' // Making the file publicly accessible
+            });
 
-        s3.upload(params, (err, data) => {
-            if (err) {
-                return res.status(500).send('Error uploading to S3');
-            }
-
-            // Return the URL of the uploaded file
-            res.status(200).send({ url: data.Location });
-        });
+            // Return the URL where the file is stored
+            res.status(200).json({ url: blobUrl });
+        } catch (err) {
+            res.status(500).send('Error uploading to Vercel Blob');
+        }
     });
 };
+
