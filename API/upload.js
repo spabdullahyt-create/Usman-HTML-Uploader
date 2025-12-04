@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
 
     form.parse(req, async (err, fields, files) => {
         if (err) {
-            console.error("Form parsing error:", err);  // Log error
+            console.error("Form parsing error:", err);
             return res.status(500).send('Error in file parsing');
         }
 
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
         }
 
         const filePath = file.filepath;
-        const fileContent = fs.readFileSync(filePath);  // Read the file content
+        const fileContent = fs.readFileSync(filePath);  // Read file content
 
         try {
             // Upload the file to Vercel Blob
@@ -26,14 +26,14 @@ module.exports = async (req, res) => {
             const blobUrl = await blob.put(fileContent, {
                 contentType: 'text/html',
                 filename: file.originalFilename,
-                access: 'public',  // Make sure it's publicly accessible
+                access: 'public',  // Ensure the file is publicly accessible
             });
 
-            // Return the permanent URL where the file is stored
+            // Generate the permanent URL
             const permanentUrl = `https://usman-html-uploader.vercel.app/uploads/${file.originalFilename}`;
-            res.status(200).json({ url: permanentUrl });
+            res.status(200).json({ url: permanentUrl });  // Return the permanent URL
         } catch (err) {
-            console.error("Blob upload error:", err);  // Log error
+            console.error("Error uploading file to Vercel Blob:", err);
             res.status(500).send('Error uploading to Vercel Blob');
         }
     });
