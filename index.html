@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your HTML Code</title>
+</head>
+<body>
+    <h2>Upload Your HTML Code</h2>
+    <p>Upload an HTML file, and we will provide you with a link to access it:</p>
+
+    <form action="/api/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="htmlFile" accept=".html" required>
+        <br><br>
+        <input type="submit" value="Upload HTML">
+    </form>
+
+    <div id="linkContainer"></div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const fileInput = document.querySelector('input[name="htmlFile"]');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                const linkContainer = document.getElementById('linkContainer');
+                linkContainer.innerHTML = `<p>Your uploaded HTML file can be accessed here:</p>
+                                           <a href="${fileURL}" target="_blank">View HTML File</a>`;
+            }
+        });
+    </script>
+</body>
+</html>
