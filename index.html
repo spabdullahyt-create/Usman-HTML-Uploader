@@ -9,23 +9,27 @@
     <h2>Upload Your HTML Code</h2>
     <p>Upload an HTML file, and we will provide you with a permanent link to access it:</p>
 
+    <!-- File upload form -->
     <form id="uploadForm" action="/api/upload" method="POST" enctype="multipart/form-data">
         <input type="file" name="htmlFile" accept=".html" required>
         <br><br>
         <input type="submit" value="Upload HTML">
     </form>
 
+    <!-- This section will show the link after the file is uploaded -->
     <div id="linkContainer" style="display: none;">
         <h3>Your uploaded file is available at:</h3>
-        <p><a id="uploadedLink" href="" target="_blank" style="word-wrap: break-word;">Your file link will appear here</a></p>
+        <p><a id="uploadedLink" href="" target="_blank">Your file link will appear here</a></p>
     </div>
 
     <script>
+        // Handle form submission via AJAX to avoid page reload
         document.getElementById('uploadForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const formData = new FormData(this);
 
+            // Send the file to the server
             fetch('/api/upload', {
                 method: 'POST',
                 body: formData,
@@ -34,8 +38,8 @@
             .then(data => {
                 // Show the link after file is uploaded
                 document.getElementById('linkContainer').style.display = 'block';
-                document.getElementById('uploadedLink').href = data.url;
-                document.getElementById('uploadedLink').textContent = data.url;
+                document.getElementById('uploadedLink').href = data.url; // Set the URL to the link
+                document.getElementById('uploadedLink').textContent = data.url; // Display the URL text
             })
             .catch(error => {
                 alert("Error uploading the file");
